@@ -4,16 +4,16 @@ function TimedPromise(action, timeout) {
     return new Promise((resolve, reject) => {
         let timedOut = false;
         let resolved = false;
-        action(() => {
+        action((r) => {
             if (!timedOut) {
                 //console.log('TP, resolve');
                 resolved = true;
-                resolve();
+                resolve(r);
             } else {
                 //console.log('TP, timed out before resolve, ignore');
             }
-        }, () => {
-            reject();
+        }, (e) => {
+            reject(e);
         });
         setTimeout(() => {
             if (!resolved) {
