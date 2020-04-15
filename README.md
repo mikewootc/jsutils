@@ -17,10 +17,14 @@ or:
 
 ## Promise with timeout
 
+```js
+    const {TimedPromise}             = require('mike-jsutils');
+
     new TimedPromise((resolve, reject) => {
         setTimeout(() => {
             resolve();
         }, 2000);
     }, 1000);
+```
 
 Notice: this TimedPromise won't call resolve() again after timeout.
