@@ -1,5 +1,3 @@
-
-
 function TimedPromise(action, timeout) {
     return new Promise((resolve, reject) => {
         let timedOut = false;

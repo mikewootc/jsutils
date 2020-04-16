@@ -18,9 +18,9 @@ or:
 ## Promise with timeout
 
 ```js
-    const {TimedPromise}             = require('mike-jsutils');
+    const {TimedPromise} = require('mike-jsutils');
 
-    new TimedPromise((resolve, reject) => {
+    let tp = TimedPromise((resolve, reject) => {
         setTimeout(() => {
             resolve();
         }, 2000);
