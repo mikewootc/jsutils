@@ -1,6 +1,6 @@
 {
   "name": "mike-jsutils",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "my jsutils",
   "main": "index.js",
   "scripts": {
