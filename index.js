@@ -1,4 +1,4 @@
-function TimedPromise(action, timeout) {
+function TimedPromise(action, timeoutMs, timeoutCallback) {
     return new Promise((resolve, reject) => {
         let timedOut = false;
         let resolved = false;
@@ -17,12 +17,14 @@ function TimedPromise(action, timeout) {
             if (!resolved) {
                 //console.log('TP, timeout');
                 timedOut = true;
+                if (timeoutCallback && typeof(timeoutCallback) == 'function') {
+                    timeoutCallback();
+                }
                 reject(new Error('Timeout'));
             }
-        }, timeout);
+        }, timeoutMs);
     });
 }
-
 
 
 module.exports = {

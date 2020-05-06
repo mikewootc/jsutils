@@ -24,6 +24,16 @@ function bfunc() {
     }, 2000);
 }
 
+function testTimeoutWithCallback() {
+    console.log('testTimeoutWithCallback, enter');
+    return TimedPromise((resolve, reject) => {
+        setTimeout(() => {
+            console.log(`testTimeoutWithCallback, wants to resolve`);
+            resolve();
+        }, 2000);
+    }, 1000, () => {console.log('Timeout callback');});
+}
+
 
 (async () => {
     try {
@@ -45,7 +55,14 @@ function bfunc() {
         let ret = await afunc(3000, 2);
         console.log('[OK] afunc 2 resolved');
     } catch(err) {
-        console.log('[FAILED] afunc 2', err);
+        console.log('[FAILED] afunc 2', err, '\r\n\n');
+    }
+
+    try {
+        let ret = await testTimeoutWithCallback();
+        console.log('[OK] testTimeoutWithCallback resolved');
+    } catch(err) {
+        console.log('[FAILED] testTimeoutWithCallback', err);
     }
 })();
 
