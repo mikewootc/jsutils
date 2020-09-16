@@ -27,6 +27,27 @@ function TimedPromise(action, timeoutMs, timeoutCallback) {
 }
 
 
+
+/**
+ * Enhanced error with custom property
+ *
+ * @extends {Error}
+ */
+class MyError extends Error {
+    constructor(message, options) {
+        super(message);
+
+        if (options) {
+            for (let k in options) {
+                this[k] = options[k];
+            }
+        }
+    }
+}
+
+
+
 module.exports = {
     TimedPromise,
+    MyError,
 }
