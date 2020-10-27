@@ -2,7 +2,7 @@
 'use strict'
 
 //const {TimedPromise} = require('mike-jsutils');
-const {TimedPromise} = require('../index');
+const {TimedPromise, getListItemValueByAnotherKey} = require('../index');
 
 function afunc(delay, id) {
     console.log('afunc, enter');
@@ -36,6 +36,14 @@ function testTimeoutWithCallback() {
 
 
 (async () => {
+    const l =  [{name: 'mike', age:36}, {name: 'woo', age: 37}];
+    let mikeAge = getListItemValueByAnotherKey(l, 'name', 'mike', 'age');
+    if (mikeAge == 36) {
+        console.log('[OK] getListItemValueByAnotherKey normal');
+    } else {
+        console.log('[FAILED] getListItemValueByAnotherKey normal');
+    }
+
     try {
         let ret = await afunc(1000, 1);
         console.log('[OK] afunc resolved\n\n\n');
