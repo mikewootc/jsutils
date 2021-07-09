@@ -2,6 +2,7 @@ function TimedPromise(action, timeoutMs, timeoutCallback) {
     return new Promise((resolve, reject) => {
         let timedOut = false;
         let resolved = false;
+        let rejected = false;
         action((r) => {
             if (!timedOut) {
                 //console.log('TP, resolve');
@@ -11,10 +12,11 @@ function TimedPromise(action, timeoutMs, timeoutCallback) {
                 //console.log('TP, timed out before resolve, ignore');
             }
         }, (e) => {
+            rejected = true;
             reject(e);
         });
         setTimeout(() => {
-            if (!resolved) {
+            if (!resolved && !rejected) {
                 //console.log('TP, timeout');
                 timedOut = true;
                 if (timeoutCallback && typeof(timeoutCallback) == 'function') {
