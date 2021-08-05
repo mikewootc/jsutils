@@ -28,7 +28,7 @@ function testTimeoutWithCallback() {
     console.log('testTimeoutWithCallback, enter');
     return TimedPromise((resolve, reject) => {
         setTimeout(() => {
-            console.log(`testTimeoutWithCallback, wants to resolve`);
+            //console.log(`testTimeoutWithCallback, wants to resolve`);
             resolve();
         }, 2000);
     }, 1000, () => {console.log('Timeout callback');});
@@ -41,14 +41,14 @@ function testTimeoutWithCallback() {
     if (mikeAge == 36) {
         console.log('[OK] getListItemValueByAnotherKey normal');
     } else {
-        console.log('[FAILED] getListItemValueByAnotherKey normal');
+        console.log('[FAIL] getListItemValueByAnotherKey normal');
     }
 
     try {
         let ret = await afunc(1000, 1);
         console.log('[OK] afunc resolved\n\n\n');
     } catch(err) {
-        console.log('[FAILED] afunc', err);
+        console.log('[FAIL] afunc', err);
     }
 
     try {
@@ -56,21 +56,47 @@ function testTimeoutWithCallback() {
         let ret = await bfunc();
         console.log('[OK] bfunc resolved');
     } catch(err) {
-        console.log('[FAILED] bfunc', err, '\r\n\n');
+        console.log('[FAIL] bfunc', err, '\r\n\n');
     }
     
+    // 测试超时
     try {
+        console.log('Test timeout ===============================================');
         let ret = await afunc(3000, 2);
-        console.log('[OK] afunc 2 resolved');
+        console.log('[FAIL] afunc 2 resolved');
     } catch(err) {
-        console.log('[FAILED] afunc 2', err, '\r\n\n');
+        console.log('[OK] afunc 2', err, '\r\n\n');
     }
 
     try {
+        console.log('Test timeout with callback =================================');
         let ret = await testTimeoutWithCallback();
-        console.log('[OK] testTimeoutWithCallback resolved');
+        console.log('[FAIL] testTimeoutWithCallback resolved');
     } catch(err) {
-        console.log('[FAILED] testTimeoutWithCallback', err);
+        if (err.message == 'Timeout') {
+            console.log('[OK] Got Timeout');
+        }
+    }
+    console.log('\r\n');
+
+    try {
+        console.log('Test resolve after timeout =================================');
+        let alreadyTimeout = false;
+        let res = await TimedPromise((resolve, reject) => {
+            setTimeout(() => {
+                //console.log(`testResolveAfterTimeout, wants to resolve`);
+                resolve(123);
+            }, 2000);
+        }, 1000, () => {
+            console.log('[OK] Got Timeout in callback');
+            alreadyTimeout = true;
+        }, (data) => {
+            if (alreadyTimeout == true && data === 123) {
+                console.log('[OK] Got resolve after Timeout');
+            }
+        });
+    } catch(err) {
+        console.log('[OK] Got Timeout in catch');
     }
 })();
 

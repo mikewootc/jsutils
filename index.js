@@ -1,4 +1,13 @@
-function TimedPromise(action, timeoutMs, timeoutCallback) {
+/**
+ * 带超时的Promise
+ *
+ * @param {function} action 与原生Promise一样用法的函数.
+ * @param {number} timeoutMs 超时时限
+ * @param {function} timeoutCallback 超时后调用的回调函数, 会在reject前调用. 可以用于超时前的promise内部清理工作.
+ * @param {function} resolveAfterTimeout 如果在超时后action中的工作又完成了, 则调用该函数. 用于某些本身无法在超时后中断的工作, 在超时后如果又成功完成了, 可以在此进行清理工作.
+ * @returns {Promise}
+ */
+function TimedPromise(action, timeoutMs, timeoutCallback, resolveAfterTimeout) {
     return new Promise((resolve, reject) => {
         let timedOut = false;
         let resolved = false;
@@ -9,6 +18,9 @@ function TimedPromise(action, timeoutMs, timeoutCallback) {
                 resolved = true;
                 resolve(r);
             } else {
+                if (resolveAfterTimeout && typeof(resolveAfterTimeout) == 'function') {
+                    resolveAfterTimeout(r);
+                }
                 //console.log('TP, timed out before resolve, ignore');
             }
         }, (e) => {
